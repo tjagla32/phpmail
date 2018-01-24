@@ -13,7 +13,7 @@ if($name && $email && $phone && $message){
  $message_body.="Adres email: $email\n";
  $message_body.="Numer telefonu: $phone\n\n\n\n";
  $message_body.=$message;
- if(mail("tomasz.jagla@agdmaster.com","Formularz kontaktowy",$message_body,$headers)){
+ if(mail("example@gmail.com","Formularz kontaktowy",$message_body,$headers)){
  $json=array("status"=>1,"msg"=>"<p class='status_ok'>Twój formularz został pomyślnie wysłany.</p>");
  }
  else{

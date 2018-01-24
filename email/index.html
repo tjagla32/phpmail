@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PHP Email</title>
+    <link rel="shortcut icon" type="image/png" href="img/logo-black.png"/>
+
+    <style>
+      .formField{font: inherit; border: 1px solid #ccc; border-radius: 3px; margin: 3px 0 10px 0; padding: 3px 0}
+textarea.formField{width: 300px; height: 70px}
+#sendBtn{cursor:pointer;background: #ccc; background: linear-gradient(#ddd 0, #eee 100%); border: 1px solid #ccc; line-height: 32px; font-size: 14px;padding: 0 25px; border-radius: 3px}
+#send_form_status{border: 1px dashed #ccc;display: none; padding: 0 10px; margin: 10px 0}
+.status_ok{color: #060}
+.status_err{color: #F00};
+    </style>
+
+  </head>
+  <body>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et tortor ut dui posuere efficitur. Duis molestie pellentesque nunc pellentesque tempus. Pellentesque tristique aliquet dui, eu varius metus maximus nec. Cras nibh ligula, ultricies id magna mattis, molestie rutrum nunc. Nulla facilisi. Proin egestas laoreet malesuada. Donec dignissim augue sapien, at commodo sem hendrerit at.</p>
+    <p>Aenean tempus metus purus, tincidunt fringilla nibh volutpat nec. Vestibulum ut laoreet nulla. In vestibulum nec mauris non faucibus. Suspendisse nec ipsum ipsum. Vivamus non justo convallis, blandit mi at, ultricies diam. Aliquam tristique sapien magna. Sed turpis lectus, euismod sit amet orci eu, molestie lacinia purus. Suspendisse venenatis quam sagittis erat hendrerit tincidunt. Etiam vitae bibendum ligula. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer efficitur, mi non vestibulum imperdiet, dui magna mattis dolor, quis rutrum sem augue vel ex. Pellentesque lacus tortor, condimentum non libero sed, maximus lacinia dolor. Fusce non diam pretium, vestibulum sapien eu, mattis lectus. In interdum convallis turpis quis volutpat.</p>
+    <hr><hr>
+
+    <h2>Formularz kontaktowy</h2>
+<div id="send_form_status"></div>
+<form method="post" action="/email/send_form.php" id="contact_form">
+     <div><label for="name">Imię i nazwisko</label></div>
+     <div><input type="text" name="name" id="name" class="formField" /></div>
+     <div><label for="phone">Numer telefonu</label></div>
+     <div><input type="text" name="phone" id="phone" class="formField" /></div>
+     <div><label for="email">Adres email</label></div>
+     <div><input type="text" name="email" id="email" class="formField" /></div>
+     <div><label for="message">Treść wiadomości</label></div>
+     <div><textarea name="message" id="message" class="formField"></textarea></div>
+     <div><input type="submit" id="sendBtn"></div>
+</form>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+  $("html").on("submit","#contact_form",function(e){
+    e.preventDefault();
+
+    if( validateEmail( $('#email').val() ) ){
+
+      $("#send_form_status").html('').hide();
+    var data=$("#contact_form").serialize();
+
+    $.post("/email/send_form.php",data,function(res){
+      $("#send_form_status").html(res.msg).show();
+      if(res.status==1)
+        $("#contact_form")[0].reset();
+    });
+
+    }else
+      $("#send_form_status").html('<p>Podano niepoprawny format e-mail</p>').css({
+                                                                               'color' : 'red',
+                                                                               'display' : 'block',
+                                                                            });
+    
+
+  });
+
+});
+</script>
+  </body>
+</html>
